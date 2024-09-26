@@ -47,7 +47,8 @@ import os
 
 if MAC:
     g_generate_extern_c_macro_definition_old = (
-            ModuleNode.generate_extern_c_macro_definition)
+        ModuleNode.generate_extern_c_macro_definition)
+
 
     def generate_extern_c_macro_definition(self, code):
         # This code is written by Cython to both cefpython API header file
@@ -61,15 +62,18 @@ if MAC:
         else:
             code.putln("#define PyMODINIT_FUNC extern \"C\""
                        " __attribute__((visibility(\"default\"))) PyObject*")
+
+
     # Overwrite Cython function
     ModuleNode.generate_extern_c_macro_definition = (
-            generate_extern_c_macro_definition)
-
+        generate_extern_c_macro_definition)
 
 # Issue #554: Shared libraries in manylinux1 wheel should not
 #             be linked against libpythonX.Y.so.1.0.
 if LINUX:
     get_libraries_old = (build_ext.get_libraries)
+
+
     def get_libraries_new(self, ext):
         libraries = get_libraries_old(self, ext)
         libpython = ('python' + str(sys.version_info.major) + '.'
@@ -79,13 +83,14 @@ if LINUX:
             # an 'm' at the end.
             if lib.startswith(libpython):
                 print("[cython_setup.py] Do not link against -l%s (Issue #554)"
-                    % lib)
+                      % lib)
                 libraries.remove(lib)
         return libraries
-    build_ext.get_libraries = (
-            get_libraries_new
-    )
 
+
+    build_ext.get_libraries = (
+        get_libraries_new
+    )
 
 # Command line args
 FAST_FLAG = False
@@ -158,6 +163,8 @@ def get_winsdk_lib():
                 r"C:\\Program Files\\Microsoft SDKs\\Windows\\v7.0\\Lib\\x64",
 
                 r'C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.34.31933\\lib\\x64',
+                # Microsoft Visual Studio2022
+                r'C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.41.34120\\lib\\onecore\\x64',
             ]
         else:
             raise Exception("Unknown architecture")
@@ -213,8 +220,8 @@ def set_compiler_options(options):
             extra_compile_args.append("-O3")
 
         extra_compile_args.extend([
-                "-DNDEBUG",
-                "-std=gnu++11",
+            "-DNDEBUG",
+            "-std=gnu++11",
         ])
 
     if LINUX:
@@ -253,43 +260,43 @@ def set_compiler_options(options):
         # > warning: use of logical '||' with constant operand
 
         extra_compile_args.extend([
-                # Compile against libc++ otherwise error "symbol not found"
-                # with cef::logging::LogMessage symbol. Also include -lc++
-                # and -lc++abi libraries.
-                "-stdlib=libc++",
-                "-Wno-return-type-c-linkage",
-                "-Wno-constant-logical-operand",
+            # Compile against libc++ otherwise error "symbol not found"
+            # with cef::logging::LogMessage symbol. Also include -lc++
+            # and -lc++abi libraries.
+            "-stdlib=libc++",
+            "-Wno-return-type-c-linkage",
+            "-Wno-constant-logical-operand",
         ])
         # From upstream CEF cefclient
         extra_compile_args.extend([
-                "-fno-strict-aliasing",
-                "-fno-rtti",
-                "-fno-threadsafe-statics",
-                "-fobjc-call-cxx-cdtors",
-                # Visibility of symbols:
-                "-fvisibility=hidden",
-                "-fvisibility-inlines-hidden",
+            "-fno-strict-aliasing",
+            "-fno-rtti",
+            "-fno-threadsafe-statics",
+            "-fobjc-call-cxx-cdtors",
+            # Visibility of symbols:
+            "-fvisibility=hidden",
+            "-fvisibility-inlines-hidden",
         ])
         # Visibility of symbols
         extra_compile_args.extend([
-                # "-flto",
-                # "-fdata-sections",
-                # "-ffunction-sections",
+            # "-flto",
+            # "-fdata-sections",
+            # "-ffunction-sections",
         ])
 
         # LINKER ARGS
         extra_link_args.extend([
-                "-mmacosx-version-min=10.9",
-                "-Wl,-search_paths_first",
-                "-F"+os.path.join(CEF_BINARIES_LIBRARIES, "bin"),
-                "-framework", "Chromium Embedded Framework",
-                "-Wl,-rpath,@loader_path/",  # ending slash is crucial!
+            "-mmacosx-version-min=10.9",
+            "-Wl,-search_paths_first",
+            "-F" + os.path.join(CEF_BINARIES_LIBRARIES, "bin"),
+            "-framework", "Chromium Embedded Framework",
+            "-Wl,-rpath,@loader_path/",  # ending slash is crucial!
         ])
         if not FAST_FLAG:
             extra_link_args.extend([
-                    # "-force_flat_namespace",
-                    # "-flto",
-                    "-Wl,-dead_strip",
+                # "-force_flat_namespace",
+                # "-flto",
+                "-Wl,-dead_strip",
             ])
 
     options["extra_compile_args"] = extra_compile_args
