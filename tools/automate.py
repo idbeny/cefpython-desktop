@@ -93,7 +93,7 @@ import glob
 import shutil
 import multiprocessing
 from collections import OrderedDict
-from setuptools.msvc import msvc9_query_vcvarsall
+# from setuptools.msvc import msvc9_query_vcvarsall
 
 # Constants
 CEF_UPSTREAM_GIT_URL = "https://bitbucket.org/chromiumembedded/cef.git"
@@ -432,7 +432,7 @@ def build_cef_projects():
         command.extend(["cmake", "-G", "Ninja"])
         command.append("-DCMAKE_BUILD_TYPE="+Options.build_type)
         if MAC:
-            command.append("-DPROJECT_ARCH=x86_64")
+            command.append(f"-DPROJECT_ARCH={platform.machine()}")
         command.append("..")
         run_command(command, build_cefclient_dir)
         print("[automate.py] OK")
@@ -525,7 +525,8 @@ def build_wrapper_library_windows(runtime_library, msvs, vcvars):
         if msvs == "2010":
             # When Using WinSDK 7.1 vcvarsall.bat doesn't work. Use
             # setuptools.msvc.msvc9_query_vcvarsall to query env vars.
-            env.update(msvc9_query_vcvarsall(10.0, arch=VS_PLATFORM_ARG))
+            raise "error"
+            # env.update(msvc9_query_vcvarsall(10.0, arch=VS_PLATFORM_ARG))
             # On Python 2.7 env values returned by both distutils
             # and setuptools are unicode, but Python expects env
             # dict values as strings.
@@ -639,7 +640,7 @@ def build_wrapper_library_mac():
     # from cefclient.
     cmake_wrapper = prepare_build_command(build_lib=True)
     cmake_wrapper.extend(["cmake", "-G", "Ninja",
-                          "-DPROJECT_ARCH=x86_64",
+                          f"-DPROJECT_ARCH={platform.machine()}",
                           "-DCMAKE_CXX_FLAGS=-stdlib=libc++",
                           "-DCMAKE_BUILD_TYPE=" + Options.build_type,
                           ".."])

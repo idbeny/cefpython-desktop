@@ -16,3 +16,6 @@ unittests/GPUCache/
 unittests/blob_storage/
 unittests/webrtc_event_logs/
 .DS_Store
+venv3.11
+linuxvenv3.11
+winvenv3.11

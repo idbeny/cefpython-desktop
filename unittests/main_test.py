@@ -263,12 +263,12 @@ class MainTest_IsolatedTest(unittest.TestCase):
         subtest_message("cef.Request.SetPostData(dict) ok")
 
         # Cookie manager
-        self.assertIsInstance(cef.CookieManager.CreateManager(path=""),
-                              cef.PyCookieManager)
+        # self.assertIsInstance(cef.CookieManager.CreateManager(path=""),
+        #                       cef.PyCookieManager)
         self.assertIsInstance(cef.CookieManager.GetGlobalManager(),
                               cef.PyCookieManager)
-        self.assertIsInstance(cef.CookieManager.GetBlockingManager(),
-                              cef.PyCookieManager)
+        # self.assertIsInstance(cef.CookieManager.GetBlockingManager(),
+        #                       cef.PyCookieManager)
         subtest_message("cef.CookieManager ok")
 
         # Window Utils

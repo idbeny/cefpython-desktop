@@ -51,8 +51,14 @@ if OS_POSTFIX == "win":
     OS_POSTFIX2 = "win32" if ARCH32 else "win64"
     CEF_POSTFIX2 = "windows32" if ARCH32 else "windows64"
 elif OS_POSTFIX == "mac":
-    OS_POSTFIX2 = "mac32" if ARCH32 else "mac64"
-    CEF_POSTFIX2 = "macosx32" if ARCH32 else "macosx64"
+    OS_POSTFIX2 = "mac32" if ARCH32 else "macosarm64"
+    if ARCH32:
+        CEF_POSTFIX2 = "macosx32"
+    else:
+        if platform.machine() == 'arm64':
+            CEF_POSTFIX2 = 'macosarm64'
+        else:
+            CEF_POSTFIX2 = "macosx64"
 elif OS_POSTFIX == "linux":
     OS_POSTFIX2 = "linux32" if ARCH32 else "linux64"
     CEF_POSTFIX2 = "linux32" if ARCH32 else "linux64"
@@ -73,12 +79,12 @@ OS_POSTFIX2_ARCH = dict(
 CEF_POSTFIX2_ARCH = dict(
     WINDOWS={"32bit": "windows32", "64bit": "windows64"},
     LINUX={"32bit": "linux32", "64bit": "linux64"},
-    MAC={"64bit": "macosx64"},
+    MAC={"64bit": CEF_POSTFIX2},
 )
 PYPI_POSTFIX2_ARCH = dict(
     WINDOWS={"32bit": "win32", "64bit": "win_amd64"},
     LINUX={"32bit": "manylinux1_i686", "64bit": "manylinux1_x86_64"},
-    MAC={"64bit": "x86_64"},
+    MAC={"64bit": platform.machine()},
 )
 
 # Python version eg. 27
@@ -455,7 +461,7 @@ def get_cefpython_version():
 
 
 def get_version_from_file(header_file):
-    with open(header_file, "rU") as fp:
+    with open(header_file, "r") as fp:
         contents = fp.read()  # no need to decode() as "rU" specified
     ret = dict()
     matches = re.findall(r'^#define (\w+) "?([^\s"]+)"?', contents,
@@ -480,6 +486,10 @@ def get_msvs_for_python(vs_prefix=False):
     elif sys.version_info[:2] == (3, 8):
         return "VS2015" if vs_prefix else "2015"
     elif sys.version_info[:2] == (3, 9):
+        return "VS2015" if vs_prefix else "2015"
+    elif sys.version_info[:2] == (3, 10):
+        return "VS2015" if vs_prefix else "2015"
+    elif sys.version_info[:2] == (3, 11):
         return "VS2015" if vs_prefix else "2015"
     else:
         print("ERROR: This version of Python is not supported")

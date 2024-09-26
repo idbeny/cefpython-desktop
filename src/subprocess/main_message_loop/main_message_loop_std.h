@@ -1,5 +1,3 @@
-// Copied from upstream cefclient with minor modifications.
-
 // Copyright (c) 2015 The Chromium Embedded Framework Authors. All rights
 // reserved. Use of this source code is governed by a BSD-style license that
 // can be found in the LICENSE file.
@@ -17,13 +15,13 @@ class MainMessageLoopStd : public MainMessageLoop {
   MainMessageLoopStd();
 
   // MainMessageLoop methods.
-  int Run() OVERRIDE;
-  void Quit() OVERRIDE;
-  void PostTask(CefRefPtr<CefTask> task) OVERRIDE;
-  bool RunsTasksOnCurrentThread() const OVERRIDE;
+  int Run() override;
+  void Quit() override;
+  void PostTask(CefRefPtr<CefTask> task) override;
+  bool RunsTasksOnCurrentThread() const override;
 
 #if defined(OS_WIN)
-  void SetCurrentModelessDialog(HWND hWndDialog) OVERRIDE;
+  void SetCurrentModelessDialog(HWND hWndDialog) override;
 #endif
 
  private:

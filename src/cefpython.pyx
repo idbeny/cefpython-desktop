@@ -201,6 +201,9 @@ from libc.string cimport memcpy
 from cython.operator cimport preincrement as preinc, dereference as deref
 # noinspection PyUnresolvedReferences
 
+from libcpp cimport nullptr_t, nullptr
+from libcpp.memory cimport unique_ptr
+
 # from cython.operator cimport address as addr # Address of an c++ object?
 
 # noinspection PyUnresolvedReferences
@@ -258,7 +261,7 @@ from cef_types cimport (
 from cef_ptr cimport CefRefPtr
 
 # noinspection PyUnresolvedReferences
-from cef_scoped_ptr cimport scoped_ptr
+from cef_scoped_refptr cimport scoped_refptr
 
 from cef_task cimport *
 from cef_platform cimport *
@@ -321,7 +324,7 @@ g_browser_settings = {}
 # noinspection PyUnresolvedReferences
 cdef CefRefPtr[CefRequestContext] g_shared_request_context
 
-cdef scoped_ptr[MainMessageLoopExternalPump] g_external_message_pump
+cdef unique_ptr[MainMessageLoopExternalPump] g_external_message_pump
 
 cdef py_bool g_MessageLoop_called = False
 cdef py_bool g_MessageLoopWork_called = False
@@ -581,8 +584,8 @@ def Initialize(applicationSettings=None, commandLineSwitches=None, **kwargs):
     # ------------------------------------------------------------------------
     if not "multi_threaded_message_loop" in application_settings:
         application_settings["multi_threaded_message_loop"] = False
-    if not "single_process" in application_settings:
-        application_settings["single_process"] = False
+    # if not "single_process" in application_settings:
+    #     application_settings["single_process"] = False
     # ------------------------------------------------------------------------
 
     # ------------------------------------------------------------------------
@@ -622,13 +625,13 @@ def Initialize(applicationSettings=None, commandLineSwitches=None, **kwargs):
     SetApplicationSettings(application_settings, &cefApplicationSettings)
 
     # External message pump
+    global g_external_message_pump
     if GetAppSetting("external_message_pump")\
             and not g_external_message_pump.get():
         Debug("Create external message pump")
         # Using .reset() here to assign new instance was causing
         # MainMessageLoopExternalPump destructor to be called. Strange.
-        g_external_message_pump.Assign(
-                MainMessageLoopExternalPump.Create())
+        g_external_message_pump = MainMessageLoopExternalPump.Create()
 
     Debug("CefInitialize()")
     cdef cpp_bool ret
@@ -685,7 +688,7 @@ def CreateBrowserSync(windowInfo=None,
             and "window_title" in browserSettings:
         # noinspection PyUnresolvedReferences
         cef_window = CefWindow.CreateTopLevelWindow(
-                <CefRefPtr[CefWindowDelegate]?>NULL)
+                <CefRefPtr[CefWindowDelegate]?>nullptr)
         Debug("CefWindow.GetChildViewCount = "
               +str(cef_window.get().GetChildViewCount()))
 
@@ -697,7 +700,7 @@ def CreateBrowserSync(windowInfo=None,
         #cef_box_layout.get().SetFlexForView(cef_window, 1)
         cef_window.get().SetToFillLayout()
         # noinspection PyUnresolvedReferences
-        cef_panel = CefPanel.CreatePanel(<CefRefPtr[CefPanelDelegate]?>NULL)
+        cef_panel = CefPanel.CreatePanel(<CefRefPtr[CefPanelDelegate]?>nullptr)
         cef_window.get().AddChildView(cef_panel)
         cef_window.get().Layout()
         cef_window.get().SetVisible(True)
@@ -762,13 +765,15 @@ def CreateBrowserSync(windowInfo=None,
         cefRequestContext.Assign(g_shared_request_context.get())
 
     # CEF browser creation.
+    cdef CefRefPtr[CefDictionaryValue] cefExtraInfo
+
     with nogil:
         cefBrowser = cef_browser_static.CreateBrowserSync(
                 cefWindowInfo, <CefRefPtr[CefClient]?>clientHandler,
-                cefNavigateUrl, cefBrowserSettings,
+                cefNavigateUrl, cefBrowserSettings, cefExtraInfo,
                 cefRequestContext)
-
-    if <void*>cefBrowser == NULL or not cefBrowser.get():
+    #lc void*
+    if not cefBrowser.get():
         Debug("CefBrowser::CreateBrowserSync() failed")
         return None
     else:
@@ -943,7 +948,7 @@ def Shutdown():
     # causing segmentation fault. See Issue #333:
     # https://github.com/cztomczak/cefpython/issues/333
     # Debug("Free g_shared_request_context")
-    # g_shared_request_context.Assign(NULL)
+    # g_shared_request_context.Assign(nullptr)
 
     # Release external message pump before CefShutdown, so that
     # message pump timer is killed.

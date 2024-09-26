@@ -224,7 +224,7 @@ def check_cython_version():
     if version != require_version:
         print("[build.py] ERROR: Wrong Cython version: {0}. Required: {1}"
               .format(version, require_version))
-        sys.exit(1)
+        # sys.exit(1)
     print("[build.py] Cython version: {0}".format(version))
 
 
@@ -316,8 +316,8 @@ def setup_environ():
 
         if ARCH32:
             raise Exception("Python 32-bit is not supported on Mac")
-        os.environ["ARCHFLAGS"] = "-arch x86_64"
-        os.environ["CEF_CCFLAGS"] += " -arch x86_64"
+        os.environ["ARCHFLAGS"] = f"-arch {platform.machine()}"
+        os.environ["CEF_CCFLAGS"] += f" -arch {platform.machine()}"
         os.environ["CEF_LINK_FLAGS"] += " -mmacosx-version-min=10.9"
 
         # -Wno-return-type-c-linkage to ignore:

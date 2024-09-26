@@ -1,6 +1,3 @@
-// Copied from upstream cefclient with minor modifications.
-// Windows UNICODE API calls were converted to ANSI or commented out.
-
 // Copyright (c) 2015 The Chromium Embedded Framework Authors. All rights
 // reserved. Use of this source code is governed by a BSD-style license that
 // can be found in the LICENSE file.
@@ -13,6 +10,10 @@
 #include <string>
 
 #include "include/internal/cef_types_wrappers.h"
+
+
+// Returns the current time in microseconds.
+uint64_t GetTimeNow();
 
 // Set the window's user data pointer.
 void SetUserDataPtr(HWND hWnd, void* ptr);
@@ -27,11 +28,11 @@ T GetUserDataPtr(HWND hWnd) {
 WNDPROC SetWndProcPtr(HWND hWnd, WNDPROC wndProc);
 
 // Return the resource string with the specified id.
-//std::wstring GetResourceString(UINT id);
+std::wstring GetResourceString(UINT id);
 
 int GetCefMouseModifiers(WPARAM wparam);
 int GetCefKeyboardModifiers(WPARAM wparam, LPARAM lparam);
-bool IsKeyDown(int keycode);
+bool IsKeyDown(WPARAM wparam);
 
 // Returns the device scale factor. For example, 200% display scaling will
 // return 2.0.

@@ -89,9 +89,12 @@ if "bdist_wheel" in sys.argv:
             elif platform.system() == "Darwin":
                 # For explanation of Mac platform tags, see:
                 # http://lepture.com/en/2014/python-on-a-hard-wheel
-                platform_tag = ("macosx_10_6_intel"
-                                ".macosx_10_9_intel.macosx_10_9_x86_64"
-                                ".macosx_10_10_intel.macosx_10_10_x86_64")
+                if platform.machine() == "arm64":
+                    platform_tag = ("macosx_11_0_arm64")
+                else:
+                    platform_tag = ("macosx_10_6_intel"
+                                    ".macosx_10_9_intel.macosx_10_9_x86_64"
+                                    ".macosx_10_10_intel.macosx_10_10_x86_64")
             tag = (tag[0], tag[1], platform_tag)
             return tag
 
@@ -150,6 +153,8 @@ def main():
             "Programming Language :: Python :: 3.7",
             "Programming Language :: Python :: 3.8",
             "Programming Language :: Python :: 3.9",
+            "Programming Language :: Python :: 3.10",
+            "Programming Language :: Python :: 3.11",
             "Topic :: Desktop Environment",
             "Topic :: Internet",
             "Topic :: Internet :: WWW/HTTP",
