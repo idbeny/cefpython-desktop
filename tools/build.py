@@ -335,7 +335,6 @@ def setup_environ():
                 " -fno-strict-aliasing"
                 " -fno-rtti"
                 " -fno-threadsafe-statics"
-                " -fobjc-call-cxx-cdtors"
                 " -fvisibility=hidden"
                 " -fvisibility-inlines-hidden"
         )

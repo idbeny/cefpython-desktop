@@ -1,4 +1,4 @@
-// Copyright (c) 2022 Marshall A. Greenblatt. All rights reserved.
+// Copyright (c) 2024 Marshall A. Greenblatt. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -33,7 +33,7 @@
 // by hand. See the translator.README.txt file in the tools directory for
 // more information.
 //
-// $hash=041c1b4e6e57987ad547daff56f96c6ff7ab15c9$
+// $hash=14ce483864835eca476d08d39ed4236fbd1a874c$
 //
 
 #ifndef CEF_INCLUDE_CAPI_CEF_REQUEST_CAPI_H_
@@ -214,7 +214,7 @@ typedef struct _cef_request_t {
   /// in the browser process to track a single request across multiple
   /// callbacks.
   ///
-  uint64(CEF_CALLBACK* get_identifier)(struct _cef_request_t* self);
+  uint64_t(CEF_CALLBACK* get_identifier)(struct _cef_request_t* self);
 } cef_request_t;
 
 ///

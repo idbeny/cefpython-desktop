@@ -1,4 +1,4 @@
-// Copyright (c) 2022 Marshall A. Greenblatt. All rights reserved.
+// Copyright (c) 2024 Marshall A. Greenblatt. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -33,7 +33,7 @@
 // by hand. See the translator.README.txt file in the tools directory for
 // more information.
 //
-// $hash=737b3ee4e678de14ebffec828d113b007e06c58d$
+// $hash=7dbd68a4517f8fc578a523d590d1ff7a8aa2a49a$
 //
 
 #ifndef CEF_INCLUDE_CAPI_CEF_WAITABLE_EVENT_CAPI_H_
@@ -96,7 +96,7 @@ typedef struct _cef_waitable_event_t {
   /// called on the browser process UI or IO threads.
   ///
   int(CEF_CALLBACK* timed_wait)(struct _cef_waitable_event_t* self,
-                                int64 max_ms);
+                                int64_t max_ms);
 } cef_waitable_event_t;
 
 ///

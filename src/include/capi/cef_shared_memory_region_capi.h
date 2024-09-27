@@ -1,4 +1,4 @@
-// Copyright (c) 2022 Marshall A. Greenblatt. All rights reserved.
+// Copyright (c) 2024 Marshall A. Greenblatt. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -33,7 +33,7 @@
 // by hand. See the translator.README.txt file in the tools directory for
 // more information.
 //
-// $hash=5f69190b21f9fa17e6fb4c2284968f8ec5b147ed$
+// $hash=3d208a996f65f37012460edb1890773218580913$
 //
 
 #ifndef CEF_INCLUDE_CAPI_CEF_SHARED_MEMORY_REGION_CAPI_H_
@@ -69,7 +69,7 @@ typedef struct _cef_shared_memory_region_t {
   /// Returns the pointer to the memory. Returns nullptr for invalid instances.
   /// The returned pointer is only valid for the life span of this object.
   ///
-  const void*(CEF_CALLBACK* memory)(struct _cef_shared_memory_region_t* self);
+  void*(CEF_CALLBACK* memory)(struct _cef_shared_memory_region_t* self);
 } cef_shared_memory_region_t;
 
 #ifdef __cplusplus

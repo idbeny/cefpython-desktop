@@ -221,7 +221,7 @@ def set_compiler_options(options):
 
         extra_compile_args.extend([
             "-DNDEBUG",
-            "-std=gnu++11",
+            "-std=gnu++17",
         ])
 
     if LINUX:
