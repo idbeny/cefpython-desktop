@@ -35,26 +35,29 @@
 #ifndef CEF_INCLUDE_CEF_VERSION_H_
 #define CEF_INCLUDE_CEF_VERSION_H_
 
-#define CEF_VERSION "128.4.12+g1d7a1f9+chromium-128.0.6613.138"
-#define CEF_VERSION_MAJOR 128
-#define CEF_COMMIT_NUMBER 3056
-#define CEF_COMMIT_HASH "1d7a1f96bf2ab9923d785d8595d164701a886f17"
+#define CEF_VERSION "120.2.7+g4bc6a59+chromium-120.0.6099.234"
+#define CEF_VERSION_MAJOR 120
+#define CEF_VERSION_MINOR 2
+#define CEF_VERSION_PATCH 7
+#define CEF_COMMIT_NUMBER 2887
+#define CEF_COMMIT_HASH "4bc6a5995a1aaa0bd39c87dc87a10c713a3d1553"
 #define COPYRIGHT_YEAR 2024
 
-#define CHROME_VERSION_MAJOR 128
+#define CHROME_VERSION_MAJOR 120
 #define CHROME_VERSION_MINOR 0
-#define CHROME_VERSION_BUILD 6613
-#define CHROME_VERSION_PATCH 138
+#define CHROME_VERSION_BUILD 6099
+#define CHROME_VERSION_PATCH 234
 
 #define DO_MAKE_STRING(p) #p
 #define MAKE_STRING(p) DO_MAKE_STRING(p)
 
 #ifndef APSTUDIO_HIDDEN_SYMBOLS
 
-#include "include/internal/cef_export.h"
+#include "../include/internal/cef_export.h"
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 // The API hash is created by analyzing CEF header files for C API type
@@ -63,40 +66,40 @@ extern "C" {
 // universal hash value will change if any platform is affected whereas the
 // platform hash values will change only if that particular platform is
 // affected.
-#define CEF_API_HASH_UNIVERSAL "3c4bef13c1801f001305b1bc3af84039b2426943"
+#define CEF_API_HASH_UNIVERSAL "bbdc07e7c5ed2ae5398efdebdd1ed08801bc91ab"
 #if defined(OS_WIN)
-#define CEF_API_HASH_PLATFORM "10e56374e7d422b45eec31ae5d2aa7ef5288621c"
+#define CEF_API_HASH_PLATFORM "002e3391fd68b0a444dbb6cd1b2a19a4c181d935"
 #elif defined(OS_MAC)
-#define CEF_API_HASH_PLATFORM "ae9f14019f456db6ad8059f17d1dfd484d4a08d7"
+#define CEF_API_HASH_PLATFORM "3e4f2433692dc8bb779314dce84b81d81d39d2c2"
 #elif defined(OS_LINUX)
-#define CEF_API_HASH_PLATFORM "84dcdea90daf46d0ba611b1d0f3e42666fb3382d"
+#define CEF_API_HASH_PLATFORM "4e707370d08d4639c41e7c8aa8027c4a6090eace"
 #endif
 
-// Returns CEF version information for the libcef library. The |entry|
-// parameter describes which version component will be returned:
-// 0 - CEF_VERSION_MAJOR
-// 1 - CEF_COMMIT_NUMBER
-// 2 - CHROME_VERSION_MAJOR
-// 3 - CHROME_VERSION_MINOR
-// 4 - CHROME_VERSION_BUILD
-// 5 - CHROME_VERSION_PATCH
-///
-CEF_EXPORT int cef_version_info(int entry);
+  // Returns CEF version information for the libcef library. The |entry|
+  // parameter describes which version component will be returned:
+  // 0 - CEF_VERSION_MAJOR
+  // 1 - CEF_COMMIT_NUMBER
+  // 2 - CHROME_VERSION_MAJOR
+  // 3 - CHROME_VERSION_MINOR
+  // 4 - CHROME_VERSION_BUILD
+  // 5 - CHROME_VERSION_PATCH
+  ///
+  CEF_EXPORT int cef_version_info(int entry);
 
-///
-// Returns CEF API hashes for the libcef library. The returned string is owned
-// by the library and should not be freed. The |entry| parameter describes which
-// hash value will be returned:
-// 0 - CEF_API_HASH_PLATFORM
-// 1 - CEF_API_HASH_UNIVERSAL
-// 2 - CEF_COMMIT_HASH
-///
-CEF_EXPORT const char* cef_api_hash(int entry);
+  ///
+  // Returns CEF API hashes for the libcef library. The returned string is owned
+  // by the library and should not be freed. The |entry| parameter describes which
+  // hash value will be returned:
+  // 0 - CEF_API_HASH_PLATFORM
+  // 1 - CEF_API_HASH_UNIVERSAL
+  // 2 - CEF_COMMIT_HASH
+  ///
+  CEF_EXPORT const char *cef_api_hash(int entry);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif  // APSTUDIO_HIDDEN_SYMBOLS
+#endif // APSTUDIO_HIDDEN_SYMBOLS
 
-#endif  // CEF_INCLUDE_CEF_VERSION_H_
+#endif // CEF_INCLUDE_CEF_VERSION_H_
