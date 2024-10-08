@@ -966,9 +966,10 @@ def Shutdown():
         MacShutdown()
 
 def SetOsModalLoop(py_bool modalLoop):
-    cdef cpp_bool cefModalLoop = bool(modalLoop)
-    with nogil:
-        CefSetOSModalLoop(cefModalLoop)
+    IF UNAME_SYSNAME == "Windows":
+        cdef cpp_bool cefModalLoop = bool(modalLoop)
+        with nogil:
+            CefSetOSModalLoop(cefModalLoop)
 
 cpdef py_void SetGlobalClientCallback(py_string name, object callback):
     global g_globalClientCallbacks

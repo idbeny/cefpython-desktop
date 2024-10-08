@@ -4,7 +4,8 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/Library/Frameworks/Python.framework/Versions/3.11/include/python3.11/**"
+                "/Library/Frameworks/Python.framework/Versions/3.11/include/python3.11/**",
+                "/opt/homebrew/Cellar/glib/2.82.1/include/glib-2.0/*"
             ],
             "defines": [],
             "macFrameworkPath": [

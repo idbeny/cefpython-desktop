@@ -14,9 +14,10 @@ if sys.platform == 'linux':
     import gtk
     pygtk.require('2.0')
 elif sys.platform == 'darwin':
-    import gi
-    gi.require_version("Gtk", "3.0")
-    from gi.repository import Gtk
+    # import gi
+    # gi.require_version("Gtk", "3.0")
+    # from gi.repository import Gtk
+    pass
 elif sys.platform == 'win32':
     # no gtk needed on Windows
     pass

@@ -210,7 +210,7 @@ cdef public void RequestHandler_OnResourceRedirect(
 
 cdef public cpp_bool RequestHandler_GetAuthCredentials(
         CefRefPtr[CefBrowser] cefBrowser,
-        CefRefPtr[CefFrame] cefFrame,
+        const CefString& cefOriginUrl,
         cpp_bool cefIsProxy,
         const CefString& cefHost,
         int cefPort,
@@ -218,65 +218,36 @@ cdef public cpp_bool RequestHandler_GetAuthCredentials(
         const CefString& cefScheme,
         CefRefPtr[CefAuthCallback] cefAuthCallback
         ) except * with gil:
-    cdef PyBrowser pyBrowser
-    cdef PyFrame pyFrame
-    cdef py_bool pyIsProxy
-    cdef str pyHost
-    cdef int pyPort
-    cdef str pyRealm
-    cdef str pyScheme
-    cdef PyAuthCallback pyAuthCallback
-    cdef py_bool returnValue
-    cdef list pyUsernameOut
-    cdef list pyPasswordOut
-    cdef object clientCallback
-    try:
-        # Issue #455: CefRequestHandler callbacks still executed after
-        # browser was closed.
-        if IsBrowserClosed(cefBrowser):
-            return False
+    cdef PyBrowser pyBrowser = GetPyBrowser(cefBrowser, "GetAuthCredentials")
+    cdef py_bool returnValue = False
 
-        pyBrowser = GetPyBrowser(cefBrowser, "GetAuthCredentials")
-        pyFrame = GetPyFrame(cefFrame)
-        pyIsProxy = bool(cefIsProxy)
-        pyHost = CefToPyString(cefHost)
-        pyPort = int(cefPort)
-        pyRealm = CefToPyString(cefRealm)
-        pyScheme = CefToPyString(cefScheme)
-        pyAuthCallback = CreatePyAuthCallback(cefAuthCallback)
-        pyUsernameOut = [""]
-        pyPasswordOut = [""]
-        clientCallback = pyBrowser.GetClientCallback("GetAuthCredentials")
-        if clientCallback:
-            returnValue = clientCallback(
-                    browser=pyBrowser,
-                    frame=pyFrame,
-                    is_proxy=pyIsProxy,
-                    host=pyHost,
-                    port=pyPort,
-                    realm=pyRealm,
-                    scheme=pyScheme,
-                    callback=pyAuthCallback)
-            return bool(returnValue)
-        else:
-            # TODO: port it from CEF 1, copy the cef1/http_authentication/.
-            # --
-            # Default implementation for Windows.
-            # IF UNAME_SYSNAME == "Windows":
-            #     returnValue = HttpAuthenticationDialog(
-            #             pyBrowser,
-            #             pyIsProxy, pyHost, pyPort, pyRealm, pyScheme,
-            #             pyUsernameOut, pyPasswordOut)
-            #     if returnValue:
-            #         pyAuthCallback.Continue(pyUsernameOut[0], pyPasswordOut[0])
-            #         return True
-            #     return False
-            # ELSE:
-            #     return False
-            return False
-    except:
-        (exc_type, exc_value, exc_trace) = sys.exc_info()
-        sys.excepthook(exc_type, exc_value, exc_trace)
+    if IsBrowserClosed(cefBrowser):
+        return False
+
+    # 转换参数
+    pyIsProxy = bool(cefIsProxy)
+    pyOriginUrl = CefToPyString(cefOriginUrl)
+    pyHost = CefToPyString(cefHost)
+    pyPort = int(cefPort)
+    pyRealm = CefToPyString(cefRealm)
+    pyScheme = CefToPyString(cefScheme)
+    pyAuthCallback = CreatePyAuthCallback(cefAuthCallback)
+
+    clientCallback = pyBrowser.GetClientCallback("GetAuthCredentials")
+    if clientCallback:
+        returnValue = clientCallback(
+            browser=pyBrowser,
+            origin_url=pyOriginUrl,
+            is_proxy=pyIsProxy,
+            host=pyHost,
+            port=pyPort,
+            realm=pyRealm,
+            scheme=pyScheme,
+            callback=pyAuthCallback)
+        return bool(returnValue)
+
+    return False  # 如果没有客户端回调，返回 False
+
 
 
 cdef public cpp_bool RequestHandler_OnQuotaRequest(

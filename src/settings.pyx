@@ -116,10 +116,10 @@ cdef void SetApplicationSettings(
         elif key == "persist_user_preferences":
             cefAppSettings.persist_user_preferences = \
                     int(appSettings[key])
-        elif key == "user_data_path":
-            cefString = new CefString(&cefAppSettings.user_data_path)
-            PyToCefStringPointer(appSettings[key], cefString)
-            del cefString
+        # elif key == "user_data_path":
+        #     cefString = new CefString(&cefAppSettings.user_data_path)
+        #     PyToCefStringPointer(appSettings[key], cefString)
+        #     del cefString
         elif key == "windowless_rendering_enabled":
             cefAppSettings.windowless_rendering_enabled = \
                     int(appSettings[key])
@@ -143,10 +143,10 @@ cdef void SetBrowserSettings(
         if key == "inherit_client_handlers_for_popups":
             # CEF Python only options. These are not to be found in CEF.
             continue
-        elif key == "accept_language_list":
-            cefString = new CefString(&cefBrowserSettings.accept_language_list)
-            PyToCefStringPointer(browserSettings[key], cefString)
-            del cefString
+        # elif key == "accept_language_list":
+        #     cefString = new CefString(&cefBrowserSettings.accept_language_list)
+        #     PyToCefStringPointer(browserSettings[key], cefString)
+        #     del cefString
         elif key == "background_color":
             cefBrowserSettings.background_color = \
                     <cef_types.uint32>int(browserSettings[key])

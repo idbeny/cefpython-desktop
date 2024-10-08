@@ -2,18 +2,17 @@
 // All rights reserved. Licensed under BSD 3-clause license.
 // Project website: https://github.com/cztomczak/cefpython
 
-#include "common/cefpython_public_api.h"
+#include "../common/cefpython_public_api.h"
 #include "include/cef_request_handler.h"
 #include "include/base/cef_callback.h"
 
 typedef cef_return_value_t ReturnValue;
 
-
 class RequestHandler : public CefRequestHandler
 {
 public:
-    RequestHandler(){}
-    virtual ~RequestHandler(){}
+    RequestHandler() {}
+    virtual ~RequestHandler() {}
 
     bool OnBeforeBrowse(CefRefPtr<CefBrowser> browser,
                         CefRefPtr<CefFrame> frame,
@@ -24,41 +23,40 @@ public:
     ReturnValue OnBeforeResourceLoad(CefRefPtr<CefBrowser> browser,
                                      CefRefPtr<CefFrame> frame,
                                      CefRefPtr<CefRequest> request,
-                                     CefRefPtr<CefCallback> callback
-                                     );
+                                     CefRefPtr<CefCallback> callback);
 
     CefRefPtr<CefResourceHandler> GetResourceHandler(
-                                      CefRefPtr<CefBrowser> browser,
-                                      CefRefPtr<CefFrame> frame,
-                                      CefRefPtr<CefRequest> request);
+        CefRefPtr<CefBrowser> browser,
+        CefRefPtr<CefFrame> frame,
+        CefRefPtr<CefRequest> request);
 
     void OnResourceRedirect(CefRefPtr<CefBrowser> browser,
                             CefRefPtr<CefFrame> frame,
                             CefRefPtr<CefRequest> request,
                             CefRefPtr<CefResponse> response,
-                            CefString& new_url);
+                            CefString &new_url);
 
     bool GetAuthCredentials(CefRefPtr<CefBrowser> browser,
-                            CefRefPtr<CefFrame> frame,
+                            const CefString &origin_url,
                             bool isProxy,
-                            const CefString& host,
+                            const CefString &host,
                             int port,
-                            const CefString& realm,
-                            const CefString& scheme,
-                            CefRefPtr<CefAuthCallback> callback);
+                            const CefString &realm,
+                            const CefString &scheme,
+                            CefRefPtr<CefAuthCallback> callback) override;
 
     bool OnQuotaRequest(CefRefPtr<CefBrowser> browser,
-                        const CefString& origin_url,
+                        const CefString &origin_url,
                         int64 new_size,
-                        CefRefPtr<CefCallback> callback) override;
+                        CefRefPtr<CefCallback> callback);
 
     void OnProtocolExecution(CefRefPtr<CefBrowser> browser,
-                             const CefString& url,
-                             bool& allow_os_execution);
+                             const CefString &url,
+                             bool &allow_os_execution);
 
     bool OnCertificateError(CefRefPtr<CefBrowser> browser,
                             cef_errorcode_t cert_error,
-                            const CefString& request_url,
+                            const CefString &request_url,
                             CefRefPtr<CefSSLInfo> ssl_info,
                             CefRefPtr<CefCallback> callback) override;
 
@@ -66,7 +64,7 @@ public:
                                    cef_termination_status_t status) override;
 
     void OnPluginCrashed(CefRefPtr<CefBrowser> browser,
-                         const CefString& plugin_path);
+                         const CefString &plugin_path);
 
     // bool CanGetCookies(CefRefPtr<CefBrowser> browser,
     //                    CefRefPtr<CefFrame> frame,
