@@ -33,7 +33,7 @@
 // by hand. See the translator.README.txt file in the tools directory for
 // more information.
 //
-// $hash=76897eedc7c858601fd7d98cb55b8808810f8493$
+// $hash=2e5a3b3b1f427a7eb1e6a447fe0d31c5ace49469$
 //
 
 #ifndef CEF_INCLUDE_CAPI_VIEWS_CEF_BROWSER_VIEW_CAPI_H_
@@ -67,7 +67,7 @@ typedef struct _cef_browser_view_t {
 
   ///
   /// Returns the Chrome toolbar associated with this BrowserView. Only
-  /// supported when using Chrome style. The cef_browser_view_delegate_t::
+  /// supported when using the Chrome runtime. The cef_browser_view_delegate_t::
   /// get_chrome_toolbar_type() function must return a value other than
   /// CEF_CTT_NONE and the toolbar will not be available until after this
   /// BrowserView is added to a cef_window_t and
@@ -81,8 +81,8 @@ typedef struct _cef_browser_view_t {
   /// content (`keydown` event handler) or cef_keyboard_handler_t. Normal
   /// priority accelerators can be registered via cef_window_t::SetAccelerator
   /// (with |high_priority|=false (0)) or internally for standard accelerators
-  /// supported by Chrome style. If |prefer_accelerators| is true (1) then the
-  /// matching accelerator will be triggered immediately (calling
+  /// supported by the Chrome runtime. If |prefer_accelerators| is true (1) then
+  /// the matching accelerator will be triggered immediately (calling
   /// cef_window_delegate_t::OnAccelerator or
   /// cef_command_handler_t::OnChromeCommand respectively) and the event will
   /// not be forwarded to the web content or cef_keyboard_handler_t first. If
@@ -93,13 +93,6 @@ typedef struct _cef_browser_view_t {
   ///
   void(CEF_CALLBACK* set_prefer_accelerators)(struct _cef_browser_view_t* self,
                                               int prefer_accelerators);
-
-  ///
-  /// Returns the runtime style for this BrowserView (ALLOY or CHROME). See
-  /// cef_runtime_style_t documentation for details.
-  ///
-  cef_runtime_style_t(CEF_CALLBACK* get_runtime_style)(
-      struct _cef_browser_view_t* self);
 } cef_browser_view_t;
 
 ///

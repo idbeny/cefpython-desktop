@@ -132,22 +132,13 @@ class CefBrowserViewDelegate : public CefViewDelegate {
   ///
   /// Called when |browser_view| receives a gesture command. Return true to
   /// handle (or disable) a |gesture_command| or false to propagate the gesture
-  /// to the browser for default handling. With Chrome style these commands can
-  /// also be handled via CefCommandHandler::OnChromeCommand.
+  /// to the browser for default handling. With the Chrome runtime these
+  /// commands can also be handled via CefCommandHandler::OnChromeCommand.
   ///
   /*--cef()--*/
   virtual bool OnGestureCommand(CefRefPtr<CefBrowserView> browser_view,
                                 cef_gesture_command_t gesture_command) {
     return false;
-  }
-
-  ///
-  /// Optionally change the runtime style for this BrowserView. See
-  /// cef_runtime_style_t documentation for details.
-  ///
-  /*--cef(default_retval=CEF_RUNTIME_STYLE_DEFAULT)--*/
-  virtual cef_runtime_style_t GetBrowserRuntimeStyle() {
-    return CEF_RUNTIME_STYLE_DEFAULT;
   }
 };
 

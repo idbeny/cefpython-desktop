@@ -40,7 +40,6 @@
 
 #include <map>
 #include <vector>
-
 #include "include/cef_base.h"
 
 ///

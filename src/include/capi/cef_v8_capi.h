@@ -33,7 +33,7 @@
 // by hand. See the translator.README.txt file in the tools directory for
 // more information.
 //
-// $hash=0b56c483bee6489e591c54c9dbb0940cd3098eaa$
+// $hash=3a188f380f8044060ea93fdca0b3d231df88979d$
 //
 
 #ifndef CEF_INCLUDE_CAPI_CEF_V8_CAPI_H_
@@ -611,6 +611,7 @@ typedef struct _cef_v8value_t {
   ///
   int(CEF_CALLBACK* set_value_byaccessor)(struct _cef_v8value_t* self,
                                           const cef_string_t* key,
+                                          cef_v8_accesscontrol_t settings,
                                           cef_v8_propertyattribute_t attribute);
 
   ///
@@ -832,23 +833,10 @@ CEF_EXPORT cef_v8value_t* cef_v8value_create_array(int length);
 /// cef_v8handler_t or cef_v8accessor_t callback, or in combination with calling
 /// enter() and exit() on a stored cef_v8context_t reference.
 ///
-/// NOTE: Always returns nullptr when V8 sandbox is enabled.
-///
 CEF_EXPORT cef_v8value_t* cef_v8value_create_array_buffer(
     void* buffer,
     size_t length,
     cef_v8array_buffer_release_callback_t* release_callback);
-
-///
-/// Create a new cef_v8value_t object of type ArrayBuffer which copies the
-/// provided |buffer| of size |length| bytes. This function should only be
-/// called from within the scope of a cef_render_process_handler_t,
-/// cef_v8handler_t or cef_v8accessor_t callback, or in combination with calling
-/// enter() and exit() on a stored cef_v8context_t reference.
-///
-CEF_EXPORT cef_v8value_t* cef_v8value_create_array_buffer_with_copy(
-    void* buffer,
-    size_t length);
 
 ///
 /// Create a new cef_v8value_t object of type function. This function should

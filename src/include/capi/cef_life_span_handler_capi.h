@@ -33,7 +33,7 @@
 // by hand. See the translator.README.txt file in the tools directory for
 // more information.
 //
-// $hash=5232dd6bf16af9b6d195a47bb41de0dfb880a65e$
+// $hash=5f2f1d43cf93b10ba58b2aa2716bc3638e58c97c$
 //
 
 #ifndef CEF_INCLUDE_CAPI_CEF_LIFE_SPAN_HANDLER_CAPI_H_
@@ -117,7 +117,7 @@ typedef struct _cef_life_span_handler_t {
   /// Views-hosted source browsers will create Views-hosted DevTools popups
   /// unless |use_default_window| is set to to true (1). DevTools popups can be
   /// blocked by returning true (1) from cef_command_handler_t::OnChromeCommand
-  /// for IDC_DEV_TOOLS. Only used with Chrome style.
+  /// for IDC_DEV_TOOLS. Only used with the Chrome runtime.
   ///
   void(CEF_CALLBACK* on_before_dev_tools_popup)(
       struct _cef_life_span_handler_t* self,
@@ -138,7 +138,7 @@ typedef struct _cef_life_span_handler_t {
                                        struct _cef_browser_t* browser);
 
   ///
-  /// Called when a browser has received a request to close. This may result
+  /// Called when a browser has recieved a request to close. This may result
   /// directly from a call to cef_browser_host_t::*close_browser() or indirectly
   /// if the browser is parented to a top-level window created by CEF and the
   /// user attempts to close that window (by clicking the 'X', for example). The

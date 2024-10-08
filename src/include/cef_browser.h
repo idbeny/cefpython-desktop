@@ -39,7 +39,6 @@
 #pragma once
 
 #include <vector>
-
 #include "include/cef_base.h"
 #include "include/cef_devtools_message_observer.h"
 #include "include/cef_drag_data.h"
@@ -170,15 +169,14 @@ class CefBrowser : public virtual CefBaseRefCounted {
   ///
   /// Returns the frame with the specified identifier, or NULL if not found.
   ///
-  /*--cef()--*/
-  virtual CefRefPtr<CefFrame> GetFrameByIdentifier(
-      const CefString& identifier) = 0;
+  /*--cef(capi_name=get_frame_byident)--*/
+  virtual CefRefPtr<CefFrame> GetFrame(int64_t identifier) = 0;
 
   ///
   /// Returns the frame with the specified name, or NULL if not found.
   ///
   /*--cef(optional_param=name)--*/
-  virtual CefRefPtr<CefFrame> GetFrameByName(const CefString& name) = 0;
+  virtual CefRefPtr<CefFrame> GetFrame(const CefString& name) = 0;
 
   ///
   /// Returns the number of frames that currently exist.
@@ -190,7 +188,7 @@ class CefBrowser : public virtual CefBaseRefCounted {
   /// Returns the identifiers of all existing frames.
   ///
   /*--cef(count_func=identifiers:GetFrameCount)--*/
-  virtual void GetFrameIdentifiers(std::vector<CefString>& identifiers) = 0;
+  virtual void GetFrameIdentifiers(std::vector<int64_t>& identifiers) = 0;
 
   ///
   /// Returns the names of all existing frames.
@@ -414,7 +412,8 @@ class CefBrowserHost : public virtual CefBaseRefCounted {
 
   ///
   /// Get the default zoom level. This value will be 0.0 by default but can be
-  /// configured. This method can only be called on the UI thread.
+  /// configured with the Chrome runtime. This method can only be called on the
+  /// UI thread.
   ///
   /*--cef()--*/
   virtual double GetDefaultZoomLevel() = 0;
@@ -939,6 +938,21 @@ class CefBrowserHost : public virtual CefBaseRefCounted {
                                     const CefSize& max_size) = 0;
 
   ///
+  /// Returns the extension hosted in this browser or NULL if no extension is
+  /// hosted. See CefRequestContext::LoadExtension for details.
+  ///
+  /*--cef()--*/
+  virtual CefRefPtr<CefExtension> GetExtension() = 0;
+
+  ///
+  /// Returns true if this browser is hosting an extension background script.
+  /// Background hosts do not have a window and are not displayable. See
+  /// CefRequestContext::LoadExtension for details.
+  ///
+  /*--cef()--*/
+  virtual bool IsBackgroundHost() = 0;
+
+  ///
   /// Set whether the browser's audio is muted.
   ///
   /*--cef()--*/
@@ -963,12 +977,12 @@ class CefBrowserHost : public virtual CefBaseRefCounted {
 
   ///
   /// Requests the renderer to exit browser fullscreen. In most cases exiting
-  /// window fullscreen should also exit browser fullscreen. With Alloy
-  /// style this method should be called in response to a user action such as
+  /// window fullscreen should also exit browser fullscreen. With the Alloy
+  /// runtime this method should be called in response to a user action such as
   /// clicking the green traffic light button on MacOS
   /// (CefWindowDelegate::OnWindowFullscreenTransition callback) or pressing the
-  /// "ESC" key (CefKeyboardHandler::OnPreKeyEvent callback). With Chrome
-  /// style these standard exit actions are handled internally but
+  /// "ESC" key (CefKeyboardHandler::OnPreKeyEvent callback). With the Chrome
+  /// runtime these standard exit actions are handled internally but
   /// new/additional user actions can use this method. Set |will_cause_resize|
   /// to true if exiting browser fullscreen will cause a view resize.
   ///
@@ -978,7 +992,7 @@ class CefBrowserHost : public virtual CefBaseRefCounted {
   ///
   /// Returns true if a Chrome command is supported and enabled. Values for
   /// |command_id| can be found in the cef_command_ids.h file. This method can
-  /// only be called on the UI thread. Only used with Chrome style.
+  /// only be called on the UI thread. Only used with the Chrome runtime.
   ///
   /*--cef()--*/
   virtual bool CanExecuteChromeCommand(int command_id) = 0;
@@ -986,30 +1000,12 @@ class CefBrowserHost : public virtual CefBaseRefCounted {
   ///
   /// Execute a Chrome command. Values for |command_id| can be found in the
   /// cef_command_ids.h file. |disposition| provides information about the
-  /// intended command target. Only used with Chrome style.
+  /// intended command target. Only used with the Chrome runtime.
   ///
   /*--cef()--*/
   virtual void ExecuteChromeCommand(
       int command_id,
       cef_window_open_disposition_t disposition) = 0;
-
-  ///
-  /// Returns true if the render process associated with this browser is
-  /// currently unresponsive as indicated by a lack of input event processing
-  /// for at least 15 seconds. To receive associated state change notifications
-  /// and optionally handle an unresponsive render process implement
-  /// CefRequestHandler::OnRenderProcessUnresponsive. This method can only be
-  /// called on the UI thread.
-  ///
-  /*--cef()--*/
-  virtual bool IsRenderProcessUnresponsive() = 0;
-
-  ///
-  /// Returns the runtime style for this browser (ALLOY or CHROME). See
-  /// cef_runtime_style_t documentation for details.
-  ///
-  /*--cef(default_retval=CEF_RUNTIME_STYLE_DEFAULT)--*/
-  virtual cef_runtime_style_t GetRuntimeStyle() = 0;
 };
 
 #endif  // CEF_INCLUDE_CEF_BROWSER_H_

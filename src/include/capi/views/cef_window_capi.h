@@ -33,7 +33,7 @@
 // by hand. See the translator.README.txt file in the tools directory for
 // more information.
 //
-// $hash=dd32b58ec9aca0e04a1d30ccf94a741995fcc094$
+// $hash=6078993477d8e0570528593193ec06efbfd0843c$
 //
 
 #ifndef CEF_INCLUDE_CAPI_VIEWS_CEF_WINDOW_CAPI_H_
@@ -220,9 +220,8 @@ typedef struct _cef_window_t {
   ///
   /// Add a View that will be overlayed on the Window contents with absolute
   /// positioning and high z-order. Positioning is controlled by |docking_mode|
-  /// as described below. Setting |can_activate| to true (1) will allow the
-  /// overlay view to receive input focus. The returned cef_overlay_controller_t
-  /// object is used to control the overlay. Overlays are hidden by default.
+  /// as described below. The returned cef_overlay_controller_t object is used
+  /// to control the overlay. Overlays are hidden by default.
   ///
   /// With CEF_DOCKING_MODE_CUSTOM:
   ///   1. The overlay is initially hidden, sized to |view|'s preferred size,
@@ -250,8 +249,7 @@ typedef struct _cef_window_t {
   struct _cef_overlay_controller_t*(CEF_CALLBACK* add_overlay_view)(
       struct _cef_window_t* self,
       struct _cef_view_t* view,
-      cef_docking_mode_t docking_mode,
-      int can_activate);
+      cef_docking_mode_t docking_mode);
 
   ///
   /// Show a menu with contents |menu_model|. |screen_point| specifies the menu
@@ -364,50 +362,6 @@ typedef struct _cef_window_t {
   /// Remove all keyboard accelerators.
   ///
   void(CEF_CALLBACK* remove_all_accelerators)(struct _cef_window_t* self);
-
-  ///
-  /// Override a standard theme color or add a custom color associated with
-  /// |color_id|. See cef_color_ids.h for standard ID values. Recommended usage
-  /// is as follows:
-  ///
-  /// 1. Customize the default native/OS theme by calling SetThemeColor before
-  ///    showing the first Window. When done setting colors call
-  ///    CefWindow::ThemeChanged to trigger CefViewDelegate::OnThemeChanged
-  ///    notifications.
-  /// 2. Customize the current native/OS or Chrome theme after it changes by
-  ///    calling SetThemeColor from the CefWindowDelegate::OnThemeColorsChanged
-  ///    callback. CefViewDelegate::OnThemeChanged notifications will then be
-  ///    triggered automatically.
-  ///
-  /// The configured color will be available immediately via
-  /// cef_view_t::GetThemeColor and will be applied to each View in this
-  /// Window's component hierarchy when cef_view_delegate_t::OnThemeChanged is
-  /// called. See OnThemeColorsChanged documentation for additional details.
-  ///
-  /// Clients wishing to add custom colors should use |color_id| values >=
-  /// CEF_ChromeColorsEnd.
-  ///
-  void(CEF_CALLBACK* set_theme_color)(struct _cef_window_t* self,
-                                      int color_id,
-                                      cef_color_t color);
-
-  ///
-  /// Trigger cef_view_delegate_t::OnThemeChanged callbacks for each View in
-  /// this Window's component hierarchy. Unlike a native/OS or Chrome theme
-  /// change this function does not reset theme colors to standard values and
-  /// does not result in a call to cef_window_delegate_t::OnThemeColorsChanged.
-  ///
-  /// Do not call this function from cef_window_delegate_t::OnThemeColorsChanged
-  /// or cef_view_delegate_t::OnThemeChanged.
-  ///
-  void(CEF_CALLBACK* theme_changed)(struct _cef_window_t* self);
-
-  ///
-  /// Returns the runtime style for this Window (ALLOY or CHROME). See
-  /// cef_runtime_style_t documentation for details.
-  ///
-  cef_runtime_style_t(CEF_CALLBACK* get_runtime_style)(
-      struct _cef_window_t* self);
 } cef_window_t;
 
 ///
